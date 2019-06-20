@@ -35,10 +35,20 @@ ubuntu-18.04:
         FOLDER: debian-based
         DOCKER_ARGS: "--build-arg SYSTEM=ubuntu --build-arg VERSION=18.04 --build-arg CROSSTOOL_NG_VERSION=crosstool-ng-${CT_NG_VERSION}"
 
+debian-stretch:
+    <<: *build-container
+    variables:
+        <<: *ct-ng_version
+        TARGET: crosstool-ng-${CI_JOB_NAME}:${CT_NG_VERSION}
+        DOCKERFILE: Dockerfile
+        FOLDER: debian-based
+        DOCKER_ARGS: "--build-arg SYSTEM=debian --build-arg VERSION=stretch --build-arg CROSSTOOL_NG_VERSION=crosstool-ng-${CT_NG_VERSION}"
+
 debian-testing:
     <<: *build-container
     variables:
-        TARGET: crosstool-ng-${CI_JOB_NAME}:1.24.0
+        <<: *ct-ng_version
+        TARGET: crosstool-ng-${CI_JOB_NAME}:${CT_NG_VERSION}
         DOCKERFILE: Dockerfile
         FOLDER: debian-based
-        DOCKER_ARGS: "--build-arg SYSTEM=debian --build-arg VERSION=testing --build-arg CROSSTOOL_NG_VERSION=crosstool-ng-1.24.0"
+        DOCKER_ARGS: "--build-arg SYSTEM=debian --build-arg VERSION=testing --build-arg CROSSTOOL_NG_VERSION=crosstool-ng-${CT_NG_VERSION}"
