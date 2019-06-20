@@ -1,4 +1,7 @@
-FROM ubuntu:18.04
+ARG SYSTEM
+ARG VERSION
+
+FROM ${SYSTEM}:${VERSION}
 MAINTAINER Bart Verhagen <barrie.verhagen@gmail.com>
 
 RUN apt-get update && \
@@ -13,7 +16,6 @@ RUN apt-get update && \
         help2man \
         make \
         libncurses5-dev \
-        python3-dev \
         autoconf \
         automake \
         libtool \
