@@ -15,9 +15,6 @@ stages:
         - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
         - echo "Building target '$TARGET' image to $CI_REGISTRY_IMAGE/$TARGET"
         - cd "${FOLDER}"
-        - cp "${DOCKERFILE}.in" "${DOCKERFILE}.temp"
-        - sed -i "s/@VERSION@/${BASE_VERSION}/g" "${DOCKERFILE}.temp"
-        - mv "${DOCKERFILE}.temp" "${DOCKERFILE}"
         - '[[ "${USE_CACHE}" == "yes" ]] && sh -c "docker pull $CI_REGISTRY_IMAGE/${TARGET} || echo No upstream image to cache from, will have to build a new one from scratch" || echo "Building new one from scratch"'
         - export DOCKER_OPTS="--force-rm=true --compress=true"
         - '[[ "${USE_CACHE}" == "yes" ]] && export DOCKER_OPTS="${DOCKER_OPTS} --cache-from $CI_REGISTRY_IMAGE/${TARGET}" || export DOCKER_OPTS="${DOCKER_OPTS} --no-cache=true"'
