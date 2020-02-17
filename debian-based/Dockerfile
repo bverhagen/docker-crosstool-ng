@@ -26,6 +26,7 @@ RUN apt-get update && \
         xz-utils \
         unzip \
         patch \
+        curl \
         libstdc++6 && \
         apt-get clean --yes && rm -rf /var/lib/apt/lists/*
 
@@ -37,5 +38,10 @@ RUN git clone --branch ${CROSSTOOL_NG_VERSION} --depth 1 https://github.com/cros
     make && \
     make install && \
     cd .. && rm -rf crosstool-ng
+
+RUN groupadd -g 4242 awesome && useradd -r -u 4242 --create-home -g awesome awesome
+RUN echo "Set disable_coredump false" >> /etc/sudo.conf
+
+USER awesome
 
 ENTRYPOINT ["ct-ng"]

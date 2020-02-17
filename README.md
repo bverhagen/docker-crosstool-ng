@@ -22,14 +22,12 @@ where:
 
 # Usage
 1. Pull the desired pre-built image
+1. Make sure the desired input and output folder (`CT_PREFIX_DIR` variable in your crosstool-ng config) is writable by all users
 1. Run the image by:
-    - Mounting the folder containing your crosstool-ng config
-    - Mount the crosstool-ng output folder (`CT_PREFIX_DIR` variable in your crosstool-ng config)
+    - Mounting the input and output folder in the container
+    - appending crosstool-ng specific commands to the end of the command line
     ```
-    $ docker run -it --volume=<host_output_folder>:<CT_PREFIX_DIR>:rw --volume=<config_folder>:/root/
+    $ docker run --rm --volume=<host output folder>:<CT_PREFIX_DIR>:rw --volume=<host input folder>:/workspace:rw ctng-example "--directory=/workspace" build
     ```
 
-1. Run crosstool-ng:
-    ```
-    $ ct-ng --directory=/root build
-    ```
+    _Note_: Make sure to to replace all variables between angular brackets `<>` with their respective values.
