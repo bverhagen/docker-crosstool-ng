@@ -55,14 +55,14 @@ ubuntu-18.04:
         FOLDER: debian-based
         DOCKER_ARGS: "--build-arg SYSTEM=ubuntu --build-arg VERSION=18.04 --build-arg CROSSTOOL_NG_VERSION=crosstool-ng-${CT_NG_VERSION}"
 
-ubuntu-19.04:
+ubuntu-19.10:build:
     <<: *build-container
     variables:
         <<: *ct-ng_version
-        TARGET: crosstool-ng-${CI_JOB_NAME}:${CT_NG_VERSION}
+        TARGET: crosstool-ng-ubuntu-19.10:${CT_NG_VERSION}
         DOCKERFILE: Dockerfile
         FOLDER: debian-based
-        DOCKER_ARGS: "--build-arg SYSTEM=ubuntu --build-arg VERSION=19.04 --build-arg CROSSTOOL_NG_VERSION=crosstool-ng-${CT_NG_VERSION}"
+        DOCKER_ARGS: "--build-arg SYSTEM=ubuntu --build-arg VERSION=19.10 --build-arg CROSSTOOL_NG_VERSION=crosstool-ng-${CT_NG_VERSION}"
 
 debian-stretch:
     <<: *build-container
@@ -94,15 +94,15 @@ publish:ubuntu-18.04:
     only:
         - master
 
-publish:ubuntu-19.04:
+ubuntu-19.10:
     <<: *docker_upload
     variables:
         <<: *ct-ng_version
-        SOURCE_IMAGE: ${CI_REGISTRY_IMAGE}/crosstool-ng-ubuntu-19.04:${CT_NG_VERSION}
-        TARGET_IMAGE: bverhagen/crosstool-ng:ubuntu-19.04_${CT_NG_VERSION}
+        SOURCE_IMAGE: ${CI_REGISTRY_IMAGE}/crosstool-ng-${CI_JOB_NAME}:${CT_NG_VERSION}
+        TARGET_IMAGE: bverhagen/crosstool-ng:${CI_JOB_NAME}_${CT_NG_VERSION}
     after_script:
-        - docker tag "${SOURCE_IMAGE}" "bverhagen/crosstool-ng:ubuntu-19.04_latest"
-        - docker push "bverhagen/crosstool-ng:ubuntu-19.04_latest"
+        - docker tag "${SOURCE_IMAGE}" "bverhagen/crosstool-ng:${CI_JOB_NAME}_latest"
+        - docker push "bverhagen/crosstool-ng:${CI_JOB_NAME}_latest"
     only:
         - master
 
