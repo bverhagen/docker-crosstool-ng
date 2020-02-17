@@ -117,3 +117,15 @@ publish:debian-stretch:
         - docker push "bverhagen/crosstool-ng:debian-stretch_latest"
     only:
         - master
+
+publish:debian-testing:
+    <<: *docker_upload
+    variables:
+        <<: *ct-ng_version
+        SOURCE_IMAGE: ${CI_REGISTRY_IMAGE}/crosstool-ng-debian-testing:${CT_NG_VERSION}
+        TARGET_IMAGE: bverhagen/crosstool-ng:debian-testing_${CT_NG_VERSION}
+    after_script:
+        - docker tag "${SOURCE_IMAGE}" "bverhagen/crosstool-ng:debian-testing_latest"
+        - docker push "bverhagen/crosstool-ng:debian-testing_latest"
+    only:
+        - master
