@@ -7,7 +7,7 @@ Docker images for crosstool-ng
 # Pre-built images
 Pre-built images can be found on Docker hub at [bverhagen/crosstool-ng](https://hub.docker.com/r/bverhagen/crosstool-ng).
 
-The tags are structures in the following way:
+The tags are structured in the following way:
 
 ```
 <distribution>_<crosstool-ng version>
