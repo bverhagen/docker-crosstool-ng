@@ -93,3 +93,15 @@ publish:ubuntu-18.04:
         - docker push "bverhagen/crosstool-ng:ubuntu-18.04_latest"
     only:
         - master
+
+publish:ubuntu-19.04:
+    <<: *docker_upload
+    variables:
+        <<: *ct-ng_version
+        SOURCE_IMAGE: ${CI_REGISTRY_IMAGE}/crosstool-ng-ubuntu-19.04:${CT_NG_VERSION}
+        TARGET_IMAGE: bverhagen/crosstool-ng:ubuntu-19.04_${CT_NG_VERSION}
+    after_script:
+        - docker tag "${SOURCE_IMAGE}" "bverhagen/crosstool-ng:ubuntu-19.04_latest"
+        - docker push "bverhagen/crosstool-ng:ubuntu-19.04_latest"
+    only:
+        - master
