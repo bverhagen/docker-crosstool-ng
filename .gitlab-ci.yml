@@ -1,5 +1,6 @@
 stages:
     - build
+    - publish
 
 .ct-ng_version: &ct-ng_version
         CT_NG_VERSION: 1.24.0
@@ -25,6 +26,25 @@ stages:
         - DEBIAN_FRONTEND=noninteractive docker build ${DOCKER_OPTS} ${DOCKER_ARGS} -t ${TARGET} -f ${DOCKERFILE} .
         - docker tag ${TARGET} ${CI_REGISTRY_IMAGE}/${TARGET}
         - docker push ${CI_REGISTRY_IMAGE}/${TARGET}
+
+.docker:upload: &docker_upload    
+    stage: publish    
+    image: docker:latest    
+    dependencies: []    
+    services:           
+        - docker:dind    
+    variables:        
+        SOURCE_IMAGE: "???"    
+        TARGET_IMAGE: "???"    
+    script:         
+        - docker login -u gitlab-ci-token -p "${CI_BUILD_TOKEN}" "${CI_REGISTRY}"
+        - docker pull "${SOURCE_IMAGE}"
+        - docker tag "${SOURCE_IMAGE}" "${TARGET_IMAGE}"
+        - export CI_REGISTRY_USER=bverhagen                     
+        - export CI_REGISTRY_PASSWORD=${DOCKER_HUB_TOKEN}
+        - rm -f ~/.docker/config.json                            
+        - docker login -u bverhagen -p "${DOCKER_HUB_TOKEN}" docker.io
+        - docker push "${TARGET_IMAGE}"
 
 ubuntu-18.04:
     <<: *build-container
@@ -61,3 +81,15 @@ debian-testing:
         DOCKERFILE: Dockerfile
         FOLDER: debian-based
         DOCKER_ARGS: "--build-arg SYSTEM=debian --build-arg VERSION=testing --build-arg CROSSTOOL_NG_VERSION=crosstool-ng-${CT_NG_VERSION}"
+
+publish:ubuntu-18.04:
+    <<: *docker_upload
+    variables:
+        <<: *ct-ng_version
+        SOURCE_IMAGE: ${CI_REGISTRY_IMAGE}/crosstool-ng-ubuntu-18.04:${CT_NG_VERSION}
+        TARGET_IMAGE: bverhagen/crosstool-ng:ubuntu-18.04_${CT_NG_VERSION}
+    after_script:
+        - docker tag "${SOURCE_IMAGE}" "bverhagen/crosstool-ng:ubuntu-18.04_latest"
+        - docker push "bverhagen/crosstool-ng:ubuntu-18.04_latest"
+    only:
+        - master
