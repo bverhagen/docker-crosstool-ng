@@ -1,5 +1,5 @@
-ARG SYSTEM
-ARG VERSION
+ARG SYSTEM=ubuntu
+ARG VERSION=18.04
 
 FROM ${SYSTEM}:${VERSION}
 MAINTAINER Bart Verhagen <barrie.verhagen@gmail.com>
@@ -29,7 +29,7 @@ RUN apt-get update && \
         libstdc++6 && \
         apt-get clean --yes && rm -rf /var/lib/apt/lists/*
 
-ARG CROSSTOOL_NG_VERSION
+ARG CROSSTOOL_NG_VERSION=1.24.0
 RUN git clone --branch ${CROSSTOOL_NG_VERSION} --depth 1 https://github.com/crosstool-ng/crosstool-ng.git && \
     cd crosstool-ng && \
     ./bootstrap && \

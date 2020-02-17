@@ -44,7 +44,6 @@ ubuntu-19.04:
         FOLDER: debian-based
         DOCKER_ARGS: "--build-arg SYSTEM=ubuntu --build-arg VERSION=19.04 --build-arg CROSSTOOL_NG_VERSION=crosstool-ng-${CT_NG_VERSION}"
 
-
 debian-stretch:
     <<: *build-container
     variables:
